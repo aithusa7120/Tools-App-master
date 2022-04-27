@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "237901633410",
+    "firebase_url": "https://toolapp-8043b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "toolapp-8043b",
+    "storage_bucket": "toolapp-8043b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237901633410:android:89e770ac8dc2790f15e19b",
+        "android_client_info": {
+          "package_name": "com.company.toolapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237901633410-5hv7ubfujb1h1lv511i9c6jsrc2farlk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9pTdHXyCQSAby_9XRPvxDNcoajMxEW0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237901633410-5hv7ubfujb1h1lv511i9c6jsrc2farlk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
