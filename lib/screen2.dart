@@ -19,7 +19,7 @@ class Screen2 extends StatefulWidget {
 class _Screen2State extends State<Screen2> {
   late final String name;
   var nameController = new TextEditingController();
-  var datecontroller = new TextEditingController();
+  var dateController = new TextEditingController();
   var sidController = new TextEditingController();
   var remarksController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -201,7 +201,7 @@ class _Screen2State extends State<Screen2> {
 
 
     String key = databaseRef.child("tools").push().key;
-    databaseRef.child("toolname").push().set({
+    databaseRef.child("tools").push().set({
       'id': key,
       'name':name,
       'sid':sid,
@@ -211,7 +211,7 @@ class _Screen2State extends State<Screen2> {
     );
 
     nameController.clear();
-    datecontroller.clear();
+    dateController.clear();
     sidController.clear();
     remarksController.clear();
 

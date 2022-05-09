@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:toolapp/test.dart';
 import 'package:toolapp/test2.dart';
 
+
 class Contacts extends StatefulWidget {
   const Contacts({Key? key}) : super(key: key);
 
@@ -21,8 +22,9 @@ class _ContactsState extends State<Contacts> {
     super.initState();
     _ref = FirebaseDatabase.instance
         .reference()
-        .child('tools')
+        .child('toolname')
         .orderByChild('date');
+
   }
 
   Widget _buildContactItem({required Map contact}) {
@@ -30,8 +32,13 @@ class _ContactsState extends State<Contacts> {
     return Container(
 
 
-      height: 160,
-        color: Colors.black12,
+      margin: EdgeInsets.symmetric(vertical: 10),
+
+      width: double.infinity,
+      height: double.infinity,
+
+      color: Colors.black12,
+
       child: Column(
 
 
@@ -41,16 +48,13 @@ class _ContactsState extends State<Contacts> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          SizedBox(
-            height: 10,
-          ),
 
           Row(
 
             children: [
               Icon(
                 Icons.home_repair_service,
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
                 size: 20,
               ),
               SizedBox(
@@ -60,7 +64,7 @@ class _ContactsState extends State<Contacts> {
                 contact['name'],
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w600),
               ),
             ],
@@ -73,7 +77,7 @@ class _ContactsState extends State<Contacts> {
 
               Icon(
                 Icons.phone_iphone,
-                color: Colors.white,
+                color: Theme.of(context).accentColor,
                 size: 20,
               ),
               SizedBox(
@@ -83,7 +87,7 @@ class _ContactsState extends State<Contacts> {
                 'Expiry Date: ',
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600),
               ),
 
@@ -93,7 +97,7 @@ class _ContactsState extends State<Contacts> {
                 contact['date'],
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w400),
               ),
             ],
@@ -107,13 +111,9 @@ class _ContactsState extends State<Contacts> {
 
               Icon(
                 Icons.qr_code,
-                color: Colors.white,
+                color: Theme.of(context).accentColor,
                 size: 20,
               ),
-              SizedBox(
-                height: 10,
-              ),
-
               SizedBox(
                 width: 6,
               ),
@@ -121,43 +121,11 @@ class _ContactsState extends State<Contacts> {
                 contact['id'],
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w700),
               ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-
-          Row(
-            children: [
-
-              Icon(
-                Icons.accessibility,
-                color: Colors.white,
-                size: 20,
-              ),
-              SizedBox(
-                width: 6,
-              ),
-              Text(
-                'Remarks: ',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
-              ),
 
 
-              Text(
-
-                contact['remarks'],
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400),
-              ),
             ],
           ),
           SizedBox(
@@ -257,8 +225,9 @@ class _ContactsState extends State<Contacts> {
     return Scaffold(
 
       body: Container(
-        color: Colors.black87,
+        width: double.infinity,
         height: double.infinity,
+        color: Colors.grey[900],
         child: FirebaseAnimatedList(
           query: _ref,
           itemBuilder: (BuildContext context, DataSnapshot snapshot,
@@ -282,4 +251,7 @@ class _ContactsState extends State<Contacts> {
       ),
     );
   }
+
 }
+
+
