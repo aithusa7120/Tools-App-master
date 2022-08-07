@@ -1,249 +1,257 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:toolapp/homepage.dart';
 
-class CustomPicker extends CommonPickerModel {
-  String digits(int value, int length) {
-    return '$value'.padLeft(length, "0");
-  }
 
-  CustomPicker({DateTime? currentTime, LocaleType? locale})
-      : super(locale: locale) {
-    this.currentTime = currentTime ?? DateTime.now();
-    this.setLeftIndex(this.currentTime.hour);
-    this.setMiddleIndex(this.currentTime.minute);
-    this.setRightIndex(this.currentTime.second);
-  }
+
+class testpage extends StatefulWidget {
+  const testpage({Key? key}) : super(key: key);
 
   @override
-  String? leftStringAtIndex(int index) {
-    if (index >= 0 && index < 24) {
-      return this.digits(index, 2);
-    } else {
-      return null;
-    }
-  }
+  _testpageState createState() => _testpageState();
 
-  @override
-  String? middleStringAtIndex(int index) {
-    if (index >= 0 && index < 60) {
-      return this.digits(index, 2);
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  String? rightStringAtIndex(int index) {
-    if (index >= 0 && index < 60) {
-      return this.digits(index, 2);
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  String leftDivider() {
-    return "|";
-  }
-
-  @override
-  String rightDivider() {
-    return "|";
-  }
-
-  @override
-  List<int> layoutProportions() {
-    return [1, 2, 1];
-  }
-
-  @override
-  DateTime finalTime() {
-    return currentTime.isUtc
-        ? DateTime.utc(
-        currentTime.year,
-        currentTime.month,
-        currentTime.day,
-        this.currentLeftIndex(),
-        this.currentMiddleIndex(),
-        this.currentRightIndex())
-        : DateTime(
-        currentTime.year,
-        currentTime.month,
-        currentTime.day,
-        this.currentLeftIndex(),
-        this.currentMiddleIndex(),
-        this.currentRightIndex());
-  }
-}
-class TestPage extends StatefulWidget {
-  const TestPage({Key? key}) : super(key: key);
-
-  @override
-  _TestPageState createState() => _TestPageState();
 }
 
-class _TestPageState extends State<TestPage> {
+class _testpageState extends State<testpage> {
+  late final String name;
+  var nameController = new TextEditingController();
+  var dateController = new TextEditingController();
+  var sidController = new TextEditingController();
+  var remarksController = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final databaseRef= FirebaseDatabase.instance.reference();
+  late String date1 = 'N/A';
+
+
+
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Datetime Picker'),
-      ),
-      body: Center(
+
+
+
+  Widget textform(){
+    date1 = 'N/A';
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextButton(
+            TextFormField(
+              style: TextStyle(color: Colors.white),
+              controller: nameController,
+              decoration: const InputDecoration(
+                  hintText: ' Enter Tool',
+                  hintStyle: TextStyle(
+                    color: Colors.white,
+                  )
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Enter Tool';
+                }
+                return null;
+              },
+            ),
+
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                TextFormField(
+                  style: TextStyle(color: Colors.white),
+                  controller: sidController,
+                  decoration: const InputDecoration(
+                      hintText: ' Enter Material Number',
+                      hintStyle: TextStyle(
+                        color: Colors.white,
+                      )
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter Material Number';
+                    }
+                    return null;
+                  },
+                ),
+                Column(
+                  children: [
+                    TextFormField(
+                      style: TextStyle(color: Colors.white),
+                      controller: remarksController,
+                      decoration: const InputDecoration(
+                          hintText: ' Add Remarks (Optional)',
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                          )
+                      ),
+
+                    ),
+                  ],
+                ),
+
+                TextButton(
+
+                    onPressed: () {
+
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(1974, 1, 1),
+                          maxTime: DateTime(2100, 1, 1),
+                          theme: DatePickerTheme(
+                              headerColor: Colors.grey,
+                              backgroundColor: Colors.black,
+                              itemStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                              doneStyle:
+                              TextStyle(color: Colors.white, fontSize: 16)),
+
+                          onChanged: (date) {
+                            print('change $date in time zone ' +
+                                date.timeZoneOffset.inHours.toString());
+
+                          }, onConfirm: (date) {
+                            print('confirm $date');
+                            date1 = '${date.day}-${date.month}-${date.year}';
+                          });
+
+
+                    },
+
+                    child: Text(
+                      'Expiry Date',
+                      style: TextStyle(color: Colors.blue),
+
+                    )
+
+                ),
+
+              ],
+
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+
+              child: ElevatedButton(
+
                 onPressed: () {
-                  DatePicker.showDatePicker(context,
-                      showTitleActions: true,
-                      minTime: DateTime(2018, 3, 5),
-                      maxTime: DateTime(2019, 6, 7),
-                      theme: DatePickerTheme(
-                          headerColor: Colors.orange,
-                          backgroundColor: Colors.blue,
-                          itemStyle: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                          doneStyle:
-                          TextStyle(color: Colors.white, fontSize: 16)),
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                  if (_formKey.currentState!.validate()||date1.isNotEmpty) {
+                    _showMyDialog();
+
+                  }
+
+                  else {
+                    ;ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please try again')),
+                    );
+                  }
                 },
-                child: Text(
-                  'show date picker(custom theme &date time range)',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showTimePicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      }, currentTime: DateTime.now());
-                },
-                child: Text(
-                  'show time picker',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showTime12hPicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      }, currentTime: DateTime.now());
-                },
-                child: Text(
-                  'show 12H time picker with AM/PM',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context,
-                      showTitleActions: true,
-                      minTime: DateTime(2020, 5, 5, 20, 50),
-                      maxTime: DateTime(2020, 6, 7, 05, 09), onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      }, locale: LocaleType.zh);
-                },
-                child: Text(
-                  'show date time picker (Chinese)',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      }, currentTime: DateTime(2008, 12, 31, 23, 12, 34));
-                },
-                child: Text(
-                  'show date time picker (English-America)',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      },
-                      currentTime: DateTime(2008, 12, 31, 23, 12, 34),
-                      locale: LocaleType.nl);
-                },
-                child: Text(
-                  'show date time picker (Dutch)',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      },
-                      currentTime: DateTime(2008, 12, 31, 23, 12, 34),
-                      locale: LocaleType.ru);
-                },
-                child: Text(
-                  'show date time picker (Russian)',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      },
-                      currentTime: DateTime.utc(2019, 12, 31, 23, 12, 34),
-                      locale: LocaleType.de);
-                },
-                child: Text(
-                  'show date time picker in UTC (German)',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showPicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      },
-                      pickerModel: CustomPicker(currentTime: DateTime.now()),
-                      locale: LocaleType.en);
-                },
-                child: Text(
-                  'show custom time picker,\nyou can custom picker model like this',
-                  style: TextStyle(color: Colors.blue),
-                )),
+                child: const Text('Submit'),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.grey[900],
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 90.0, left : 25.0, right: 15.0, bottom: 15.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: Text(
+                        "    Add Tools",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                        )
+                    ),
+                  ),
+                  textform(),
+                ]
+            ),
+          ),
+        ),
+      ),
+
+    );
+  }
+  void insertData(String  name, String sid, String remarks, String date1){
+
+
+    String key = databaseRef.child("tools").push().key;
+    databaseRef.child("tools").push().set({
+      'id': key,
+      'name':name,
+      'sid':sid,
+      'remarks': remarks,
+      'date': date1,
+    }
+    );
+
+    nameController.clear();
+    dateController.clear();
+    sidController.clear();
+    remarksController.clear();
+
+
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm!'),
+          content: SingleChildScrollView(
+            child: Text('Are you sure you want to Confirm?'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                Navigator.pop(context);
+                insertData(nameController.text, sidController.text, remarksController.text, date1);
+
+
+
+
+
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: (){
+                Navigator.pop(context);
+
+              },
+            )
+          ],
+        );
+      },
     );
   }
 }

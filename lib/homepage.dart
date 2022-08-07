@@ -39,7 +39,9 @@ class _ContactsState extends State<Contacts> {
 
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children:  [
+
+
 
           SizedBox(
             height: 10,

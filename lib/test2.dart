@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class EditContact extends StatefulWidget {
   String contactKey;
@@ -21,7 +22,9 @@ class _EditContactState extends State<EditContact> {
     super.initState();
     _nameController = TextEditingController();
     _numberController = TextEditingController();
-    _ref = FirebaseDatabase.instance.reference().child('Contacts');
+    var dateController = new TextEditingController();
+    late String date1 = 'N/A';
+    _ref = FirebaseDatabase.instance.reference().child('tools');
     getContactDetail();
   }
 
@@ -55,7 +58,7 @@ class _EditContactState extends State<EditContact> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Contact'),
+        title: Text('Update Tool'),
       ),
       body: Container(
         margin: EdgeInsets.all(15),
@@ -79,9 +82,23 @@ class _EditContactState extends State<EditContact> {
             TextFormField(
               controller: _numberController,
               decoration: InputDecoration(
-                hintText: 'Enter Number',
+                hintText: 'Enter Material Number',
                 prefixIcon: Icon(
                   Icons.phone_iphone,
+                  size: 30,
+                ),
+                fillColor: Colors.white,
+                filled: true,
+                contentPadding: EdgeInsets.all(15),
+              ),
+            ),
+            SizedBox(height: 15),
+            TextFormField(
+              controller: _numberController,
+              decoration: InputDecoration(
+                hintText: 'Remarks',
+                prefixIcon: Icon(
+                  Icons.add,
                   size: 30,
                 ),
                 fillColor: Colors.white,
@@ -110,12 +127,14 @@ class _EditContactState extends State<EditContact> {
             SizedBox(
               height: 25,
             ),
+
+
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: RaisedButton(
                 child: Text(
-                  'Update Contact',
+                  'Update Details',
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -141,7 +160,7 @@ class _EditContactState extends State<EditContact> {
 
     _nameController.text = contact['name'];
 
-    _numberController.text = contact['number'];
+    _numberController.text = contact['sid'];
 
     setState(() {
       _typeSelected = contact['type'];

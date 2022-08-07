@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Contacts(),
     QRScanner(),
     Screen2(),
-    TestPage(),
+    testpage(),
   ];
 
   void navigationTapped(int page) {
