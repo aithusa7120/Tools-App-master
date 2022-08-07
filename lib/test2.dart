@@ -12,17 +12,19 @@ class EditContact extends StatefulWidget {
 }
 
 class _EditContactState extends State<EditContact> {
-  late TextEditingController _nameController, _numberController;
+  late TextEditingController _nameController,_numberController,_remarksController,_dateController;
   String _typeSelected = '';
 
   late DatabaseReference _ref;
+  late String date1 = 'N/A';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _nameController = TextEditingController();
+    _dateController = TextEditingController();
     _numberController = TextEditingController();
-    var dateController = new TextEditingController();
+    _remarksController = TextEditingController();
     late String date1 = 'N/A';
     _ref = FirebaseDatabase.instance.reference().child('tools');
     getContactDetail();
@@ -61,8 +63,10 @@ class _EditContactState extends State<EditContact> {
         title: Text('Update Tool'),
       ),
       body: Container(
+
         margin: EdgeInsets.all(15),
         child: Column(
+
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
@@ -78,6 +82,7 @@ class _EditContactState extends State<EditContact> {
                 contentPadding: EdgeInsets.all(15),
               ),
             ),
+
             SizedBox(height: 15),
             TextFormField(
               controller: _numberController,
@@ -92,9 +97,10 @@ class _EditContactState extends State<EditContact> {
                 contentPadding: EdgeInsets.all(15),
               ),
             ),
+
             SizedBox(height: 15),
             TextFormField(
-              controller: _numberController,
+              controller: _remarksController,
               decoration: InputDecoration(
                 hintText: 'Remarks',
                 prefixIcon: Icon(
@@ -109,26 +115,36 @@ class _EditContactState extends State<EditContact> {
             SizedBox(
               height: 15,
             ),
-            Container(
-              height: 40,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  _buildContactType('Work'),
-                  SizedBox(width: 10),
-                  _buildContactType('Family'),
-                  SizedBox(width: 10),
-                  _buildContactType('Friends'),
-                  SizedBox(width: 10),
-                  _buildContactType('Others'),
-                ],
-              ),
-            ),
+            TextButton(
+                onPressed: () {
+                  DatePicker.showDatePicker(context,
+                      showTitleActions: true,
+                      minTime: DateTime(1974, 1, 1),
+                      maxTime: DateTime(2100, 1, 1),
+                      theme: DatePickerTheme(
+                          headerColor: Colors.white,
+                          backgroundColor: Colors.white,
+                          itemStyle: TextStyle(
+                              color: Colors.blueAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                          doneStyle:
+                          TextStyle(color: Colors.blueAccent, fontSize: 16)),
+                      onChanged: (date) {
+                        print('change $date in time zone ' +
+                            date.timeZoneOffset.inHours.toString());
+                      }, onConfirm: (date) {
+                        print('confirm $date');
+                        date1 = '${date.day}-${date.month}-${date.year}';
+                      });
+                },
+                child: Text(
+                  'Expiry Date',
+                  style: TextStyle(color: Colors.blue),
+                )),
             SizedBox(
               height: 25,
             ),
-
-
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -147,7 +163,9 @@ class _EditContactState extends State<EditContact> {
                 color: Theme.of(context).primaryColor,
               ),
             )
+
           ],
+
         ),
       ),
     );
@@ -159,8 +177,10 @@ class _EditContactState extends State<EditContact> {
     Map contact = snapshot.value;
 
     _nameController.text = contact['name'];
-
     _numberController.text = contact['sid'];
+    _remarksController.text = contact['remarks'];
+    _dateController = contact ['date'];
+
 
     setState(() {
       _typeSelected = contact['type'];
@@ -168,12 +188,14 @@ class _EditContactState extends State<EditContact> {
   }
 
   void saveContact() {
-    String name = _nameController.text;
-    String number = _numberController.text;
-
+    String name1 = _nameController.text;
+    String sid = _numberController.text;
+    String remarks = _remarksController.text;
     Map<String, String> contact = {
-      'name': name,
-      'number':  number,
+      'name': name1,
+      'sid': sid,
+      'date': date1,
+      'remarks': remarks,
       'type': _typeSelected,
     };
 

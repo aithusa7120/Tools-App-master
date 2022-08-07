@@ -28,31 +28,20 @@ class _ContactsState extends State<Contacts> {
   Widget _buildContactItem({required Map contact}) {
 
     return Container(
-
-
-      height: 160,
-        color: Colors.black12,
+      height: 190,
+        color: Colors.white,
       child: Column(
-
-
-
-
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children:  [
-
-
-
           SizedBox(
             height: 10,
           ),
-
           Row(
-
             children: [
               Icon(
                 Icons.home_repair_service,
-                color: Colors.white,
+                color: Colors.black,
                 size: 20,
               ),
               SizedBox(
@@ -62,7 +51,7 @@ class _ContactsState extends State<Contacts> {
                 contact['name'],
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Colors.blueAccent,
                     fontWeight: FontWeight.w600),
               ),
             ],
@@ -72,10 +61,31 @@ class _ContactsState extends State<Contacts> {
           ),
           Row(
             children: [
-
+              Icon(
+                Icons.add_box,
+                color: Colors.black,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                contact['sid'],
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
               Icon(
                 Icons.phone_iphone,
-                color: Colors.white,
+                color: Colors.black,
                 size: 20,
               ),
               SizedBox(
@@ -85,17 +95,14 @@ class _ContactsState extends State<Contacts> {
                 'Expiry Date: ',
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Colors.blueAccent,
                     fontWeight: FontWeight.w600),
               ),
-
-
               Text(
-
                 contact['date'],
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.w400),
               ),
             ],
@@ -105,11 +112,38 @@ class _ContactsState extends State<Contacts> {
           ),
           Row(
             children: [
-
-
+              Icon(
+                Icons.accessibility,
+                color: Colors.black,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                'Remarks: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w600),
+              ),
+              Text(
+                contact['remarks'],
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
               Icon(
                 Icons.qr_code,
-                color: Colors.white,
+                color: Colors.black,
                 size: 20,
               ),
               SizedBox(
@@ -123,42 +157,8 @@ class _ContactsState extends State<Contacts> {
                 contact['id'],
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Colors.blueAccent,
                     fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-
-          Row(
-            children: [
-
-              Icon(
-                Icons.accessibility,
-                color: Colors.white,
-                size: 20,
-              ),
-              SizedBox(
-                width: 6,
-              ),
-              Text(
-                'Remarks: ',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
-              ),
-
-
-              Text(
-
-                contact['remarks'],
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400),
               ),
             ],
           ),
@@ -223,8 +223,13 @@ class _ContactsState extends State<Contacts> {
               ),
             ],
           )
+
         ],
+
       ),
+
+
+
     );
   }
 
@@ -270,17 +275,6 @@ class _ContactsState extends State<Contacts> {
             return _buildContactItem(contact: contact);
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) {
-              return AddContacts();
-            }),
-          );
-        },
-        child: Icon(Icons.add, color: Colors.white),
       ),
     );
   }
