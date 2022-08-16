@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:toolapp/test.dart';
 import 'package:toolapp/test2.dart';
 
+import 'details.dart';
+
 class Contacts extends StatefulWidget {
   const Contacts({Key? key}) : super(key: key);
 
@@ -173,7 +175,7 @@ class _ContactsState extends State<Contacts> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => EditContact(
+                          builder: (_) => details(
                             contactKey: contact['key'],
                           )));
                 },

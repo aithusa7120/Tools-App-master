@@ -11,7 +11,7 @@ void main() async {
   // To use Firebase, we have to initialize it first.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,9 +20,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-      ),
+      title: 'Toolstoreapp',
+      theme: ThemeData(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -38,7 +37,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   int pageIndex = 0;
 
   static const List<Widget> pages = <Widget>[
@@ -58,63 +56,52 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black87,
-        title: const Text('Toolsomethingapp'),
-
+        backgroundColor: Colors.blueAccent,
+        title: const Text('31FMDTOOLSTORE'),
       ),
       body: Center(
         child: pages.elementAt(pageIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.blueAccent,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white.withOpacity(.60),
         selectedFontSize: 20,
         unselectedFontSize: 14,
         type: BottomNavigationBarType.fixed,
-          items: [
-
-            BottomNavigationBarItem(
-
-              icon: Icon(
-                Icons.home,
-                color: Colors.white,
-              ),
-              label: "Home",
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.white,
             ),
-
-
-                BottomNavigationBarItem(
-              icon: Icon(
-                Icons.qr_code,
-                color: Colors.white,
-              ),
-              label: "Scan",
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.qr_code,
+              color: Colors.white,
             ),
-
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-
-              label: "Add",
-
+            label: "Scan",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
             ),
-            BottomNavigationBarItem(
-
-              icon: Icon(
-                Icons.gps_fixed,
-                color: Colors.white,
-              ),
-              label: "Test Page",
+            label: "Add",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.gps_fixed,
+              color: Colors.white,
             ),
-          ],
-          onTap: navigationTapped,
-          currentIndex: pageIndex,
-
-        ),
-
+            label: "Test Page",
+          ),
+        ],
+        onTap: navigationTapped,
+        currentIndex: pageIndex,
+      ),
     );
 
   }

@@ -2,16 +2,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-class EditContact extends StatefulWidget {
+class details extends StatefulWidget {
   String contactKey;
 
-  EditContact({required this.contactKey});
+  details({required this.contactKey});
 
   @override
-  _EditContactState createState() => _EditContactState();
+  _detailsState createState() => _detailsState();
 }
 
-class _EditContactState extends State<EditContact> {
+class _detailsState extends State<details> {
   late TextEditingController _nameController,_numberController,_remarksController,_dateController;
   String _typeSelected = '';
 
@@ -21,6 +21,10 @@ class _EditContactState extends State<EditContact> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _nameController = TextEditingController();
+    _dateController = TextEditingController();
+    _numberController = TextEditingController();
+    _remarksController = TextEditingController();
     late String date1 = 'N/A';
     _ref = FirebaseDatabase.instance.reference().child('tools');
     getContactDetail();
@@ -65,19 +69,12 @@ class _EditContactState extends State<EditContact> {
 
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              contact['remarks'],
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400),
-            ),
+
 
             SizedBox(height: 15),
             TextFormField(
               controller: _numberController,
               decoration: InputDecoration(
-                hintText: 'Enter Material Number',
                 prefixIcon: Icon(
                   Icons.phone_iphone,
                   size: 30,
