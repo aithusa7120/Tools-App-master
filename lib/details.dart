@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class details extends StatefulWidget {
@@ -12,17 +13,19 @@ class details extends StatefulWidget {
 }
 
 class _detailsState extends State<details> {
-  late TextEditingController _nameController,_numberController,_remarksController,_dateController;
+  late TextEditingController _nameController,_numberController,_remarksController,_imgController;
   String _typeSelected = '';
-
   late DatabaseReference _ref;
   late String date1 = 'N/A';
+  FirebaseStorage storage = FirebaseStorage.instance;
   @override
   void initState() {
+
     // TODO: implement initState
     super.initState();
+
     _nameController = TextEditingController();
-    _dateController = TextEditingController();
+    _imgController = TextEditingController();
     _numberController = TextEditingController();
     _remarksController = TextEditingController();
     late String date1 = 'N/A';
@@ -60,115 +63,225 @@ class _detailsState extends State<details> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Tool'),
+        title: Text('Details'),
       ),
-      body: Container(
+      body: Center(
 
-        margin: EdgeInsets.all(15),
-        child: Column(
-
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-
-            SizedBox(height: 15),
-            TextFormField(
-              controller: _numberController,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.phone_iphone,
-                  size: 30,
-                ),
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: EdgeInsets.all(15),
-              ),
-            ),
-
-            SizedBox(height: 15),
-            TextFormField(
-              controller: _remarksController,
-              decoration: InputDecoration(
-                hintText: 'Remarks',
-                prefixIcon: Icon(
-                  Icons.add,
-                  size: 30,
-                ),
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: EdgeInsets.all(15),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            TextButton(
-                onPressed: () {
-                  DatePicker.showDatePicker(context,
-                      showTitleActions: true,
-                      minTime: DateTime(1974, 1, 1),
-                      maxTime: DateTime(2100, 1, 1),
-                      theme: DatePickerTheme(
-                          headerColor: Colors.white,
-                          backgroundColor: Colors.white,
-                          itemStyle: TextStyle(
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                          doneStyle:
-                          TextStyle(color: Colors.blueAccent, fontSize: 16)),
-                      onChanged: (date) {
-                        print('change $date in time zone ' +
-                            date.timeZoneOffset.inHours.toString());
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                        date1 = '${date.day}-${date.month}-${date.year}';
-                      });
-                },
-                child: Text(
-                  'Expiry Date',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            SizedBox(
-              height: 25,
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: RaisedButton(
-                child: Text(
-                  'Update Details',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                onPressed: () {
-                  saveContact();
-                },
-                color: Theme.of(context).primaryColor,
-              ),
-            )
-
-          ],
+        child: Text(_imgController.text)
 
         ),
-      ),
+
+      );
+
+  }
+
+  Widget _imageItem({required Map contact}){
+    return Container(
+      width: 300,
+      height: 250,
+      child: Image.network(_imgController.text)
     );
   }
 
+  Widget _buildContactItem({required Map contact}) {
+
+    return Container(
+      height: 190,
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:  [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.home_repair_service,
+                color: Colors.black,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                contact['name'],
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.add_box,
+                color: Colors.black,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                contact['sid'],
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.phone_iphone,
+                color: Colors.black,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                'Expiry Date: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w600),
+              ),
+              Text(
+                contact['date'],
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.accessibility,
+                color: Colors.black,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                'Remarks: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w600),
+              ),
+              Text(
+                contact['remarks'],
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.qr_code,
+                color: Colors.black,
+                size: 20,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                contact['id'],
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => details(
+                            contactKey: contact['key'],
+                          )));
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.edit,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Text('Edit',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+            ],
+          )
+        ],
+      ),
+
+
+
+    );
+  }
   getContactDetail() async {
+
     DataSnapshot snapshot = await _ref.child(widget.contactKey).once();
 
     Map contact = snapshot.value;
 
-    _nameController.text = contact['name'];
-    _numberController.text = contact['sid'];
-    _remarksController.text = contact['remarks'];
-    _dateController = contact ['date'];
-
-
+    setState(() {
+      _nameController.text = contact['name'];
+    });
+    setState(() {
+      _numberController.text = contact['sid'];
+    });
+    setState(() {
+      _remarksController.text = contact['remarks'];
+    });
+    setState(() {
+      _imgController = contact ['img'];
+    });
     setState(() {
       _typeSelected = contact['type'];
     });

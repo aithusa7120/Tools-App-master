@@ -2,6 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'storage.dart';
 
 class Screen2 extends StatefulWidget {
   const Screen2({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class Screen2 extends StatefulWidget {
 
 class _Screen2State extends State<Screen2> {
   late final String name;
+
   var nameController = TextEditingController();
   var dateController = TextEditingController();
   var sidController = TextEditingController();
@@ -19,10 +22,12 @@ class _Screen2State extends State<Screen2> {
   final _formKey = GlobalKey<FormState>();
   final databaseRef = FirebaseDatabase.instance.reference();
   late String date1 = 'N/A';
-
+  late String imgUpload;
   @override
   Widget textform() {
+    final Storage storage = Storage();
     date1 = 'N/A';
+    bool isEnabled = true;
     return Form(
       key: _formKey,
       child: Padding(
@@ -89,9 +94,9 @@ class _Screen2State extends State<Screen2> {
                                   color: Colors.blueAccent,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18),
-                              doneStyle:
-                                  TextStyle(color: Colors.blueAccent, fontSize: 16)),
-                          onChanged: (date) {
+                              doneStyle: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 16)), onChanged: (date) {
                         print('change $date in time zone ' +
                             date.timeZoneOffset.inHours.toString());
                       }, onConfirm: (date) {
@@ -108,11 +113,44 @@ class _Screen2State extends State<Screen2> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
+                  onPressed:() async {
+                    final results = await FilePicker.platform.pickFiles(
+                      allowMultiple: false,
+                      type: FileType.custom,
+                      allowedExtensions: ['png', 'jpg'],
+                    );
+                    if (results == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No file selected'),
+                        ),
+                      );
+                      return null;
+                    } else if (results != null) {
+                      null;
+                    }
+
+                    final path = results.files.single.path!;
+                    imgUpload = results.files.single.name;
+                    final fileName = results.files.single.name;
+
+                    storage
+                        .uploadFile(path, fileName)
+                        .then((value) => print('Done'));
+                    
+
+
+
+                  },
+                  child: Text('Upload File')),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate() || date1.isNotEmpty) {
                     _showMyDialog();
                   } else {
-                    ;
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Please try again')),
                     );
@@ -165,6 +203,7 @@ class _Screen2State extends State<Screen2> {
       'sid': sid,
       'remarks': remarks,
       'date': date1,
+      'img': imgUpload
     });
 
     nameController.clear();

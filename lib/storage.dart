@@ -19,4 +19,11 @@ class Storage{
       print(e);
     }
   }
+  Future<String> downloadURL(String imageName) async{
+    String downloadURL = await storage.ref('test/$imageName').getDownloadURL();
+
+    return downloadURL;
+  }
 }
+
+
